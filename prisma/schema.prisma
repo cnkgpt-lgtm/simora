@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// role: admin | pegawai | petugas_ruangan
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  username      String         @unique
+  password      String
+  role          String         @default("pegawai")
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bookings      Booking[]      @relation("Requester")
+  reviews       Booking[]      @relation("Reviewer")
+  maintenances  Maintenance[]  @relation("MaintPic")
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+// status ruang: tersedia | digunakan | pemeliharaan
+// condition: baik | rusak ringan | rusak berat
+model Room {
+  id           String        @id @default(cuid())
+  code         String        @unique
+  name         String
+  type         String        @default("Ruang Rapat")
+  building     String        @default("")
+  floor        String        @default("")
+  location     String        @default("")
+  capacity     Int           @default(10)
+  facilities   String        @default("")
+  pic          String        @default("")
+  condition    String        @default("baik")
+  status       String        @default("tersedia")
+  isActive     Boolean       @default(true)
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  bookings     Booking[]
+  maintenances Maintenance[]
+}
+
+// status pemesanan: menunggu | disetujui | ditolak | dibatalkan
+// status operasional (derivasi): terjadwal | berlangsung | selesai | dibatalkan
+model Booking {
+  id           String    @id @default(cuid())
+  roomId       String
+  room         Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  requesterId  String
+  requester    User      @relation("Requester", fields: [requesterId], references: [id])
+  date         String
+  startTime    String
+  endTime      String
+  startsAt     DateTime
+  endsAt       DateTime
+  title        String
+  purpose      String?
+  participants Int       @default(1)
+  notes        String?
+  status       String    @default("menunggu")
+  reviewNote   String?
+  reviewerId   String?
+  reviewer     User?     @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewedAt   DateTime?
+  actualStart  DateTime?
+  actualEnd    DateTime?
+  reminderSent Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([roomId, date])
+  @@index([date])
+  @@index([status])
+}
+
+// status pemeliharaan: dijadwalkan | berlangsung | selesai
+model Maintenance {
+  id          String   @id @default(cuid())
+  roomId      String
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  startDate   String
+  endDate     String
+  description String
+  status      String   @default("dijadwalkan")
+  picId       String?
+  pic         User?    @relation("MaintPic", fields: [picId], references: [id])
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// type: persetujuan | penolakan | pengingat | pengajuan_baru | peringatan | jadwal
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  object    String
+  detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

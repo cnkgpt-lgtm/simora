@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* Utilitas untuk pratinjau 3D */
+.p3d {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.card-3d {
+  transform: rotateX(4deg);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.card-3d:hover {
+  transform: rotateX(0deg) translateY(-4px);
+}
