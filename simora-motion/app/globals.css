@@ -1,0 +1,281 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+}
+
+/* Utilitas untuk pratinjau 3D */
+.p3d {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.card-3d {
+  transform: rotateX(4deg);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.card-3d:hover {
+  transform: rotateX(0deg) translateY(-4px);
+}
+
+/* ===== Animasi motion graphic menu navigasi ===== */
+
+/* Item menu masuk berurutan (staggered) dari kiri */
+@keyframes nav-item-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Item menu mobile masuk berurutan dari bawah */
+@keyframes nav-mobile-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Kilau gradasi yang berjalan pada menu aktif */
+@keyframes nav-shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Denyut halus pada ikon menu aktif */
+@keyframes nav-icon-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+.nav-link {
+  animation: nav-item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Sapuan gradasi saat hover */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0.03));
+  transform: translateX(-102%);
+  transition: transform 0.38s ease;
+  pointer-events: none;
+}
+.nav-link:hover::after {
+  transform: translateX(0);
+}
+.nav-link-active::after {
+  transform: translateX(0);
+  background: linear-gradient(
+      90deg,
+      rgba(16, 185, 129, 0.16),
+      rgba(16, 185, 129, 0.05),
+      rgba(16, 185, 129, 0.16)
+    )
+    no-repeat;
+  background-size: 200% 100%;
+  animation: nav-shine 3.2s linear infinite;
+}
+
+/* Ikon: membesar & miring saat hover, berdenyut halus saat aktif */
+.nav-link .nav-icon {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s, color 0.3s;
+}
+.nav-link:hover .nav-icon {
+  transform: scale(1.12) rotate(-7deg);
+}
+.nav-link-active .nav-icon {
+  animation: nav-icon-pulse 2.4s ease-in-out infinite;
+}
+.nav-link-active:hover .nav-icon {
+  transform: scale(1.12) rotate(-7deg);
+  animation: none;
+}
+
+/* Menu mobile */
+.nav-mobile-link {
+  animation: nav-mobile-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.nav-mobile-link .nav-icon-mobile {
+  display: inline-flex;
+  transition: transform 0.3s ease;
+}
+.nav-mobile-link:active .nav-icon-mobile {
+  transform: rotate(-10deg) scale(1.15);
+}
+
+/* Hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link,
+  .nav-mobile-link {
+    animation: none;
+  }
+  .nav-link::after,
+  .nav-link-active::after {
+    animation: none;
+    transform: none;
+    background: rgba(16, 185, 129, 0.08);
+  }
+  .nav-link-active .nav-icon {
+    animation: none;
+  }
+}
+
+/* ===== Motion graphics umum (ringan, CSS murni) ===== */
+
+/* Transisi antar halaman */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.page-enter {
+  animation: page-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Kartu/elemen muncul berurutan (stagger fade-naik) */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.motion-rise {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Modal: latar memudar, panel melompat masuk */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.overlay-enter {
+  animation: overlay-in 0.22s ease both;
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.modal-enter {
+  animation: modal-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Dropdown meluncur dari atas */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.dropdown-enter {
+  animation: dropdown-in 0.2s ease-out both;
+  transform-origin: top right;
+}
+
+/* Skeleton shimmer saat memuat */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* Titik denyut untuk status yang sedang berlangsung */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.8);
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* Kartu terangkat halus saat hover */
+.card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -12px rgba(16, 185, 129, 0.35);
+}
+
+/* Hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .motion-rise,
+  .modal-enter,
+  .overlay-enter,
+  .dropdown-enter {
+    animation: none;
+  }
+  .skeleton,
+  .pulse-dot {
+    animation: none;
+  }
+  .card-lift,
+  .card-lift:hover {
+    transform: none;
+  }
+}
