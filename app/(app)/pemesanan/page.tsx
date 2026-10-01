@@ -411,8 +411,8 @@ export default function PemesananPage() {
 
       {/* Modal pengajuan */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-lg">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="modal-enter max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-lg">
             <h2 className="text-lg font-bold text-gray-900">Ajukan Pemesanan Rapat</h2>
             <form onSubmit={submitCreate} className="mt-4 space-y-3">
               {roomsEmpty && (
@@ -503,8 +503,8 @@ export default function PemesananPage() {
 
       {/* Modal tinjauan admin */}
       {review && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="modal-enter w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
             <h2 className="text-lg font-bold text-gray-900">
               {review.decision === 'disetujui' ? 'Setujui Pemesanan' : 'Tolak Pemesanan'}
             </h2>

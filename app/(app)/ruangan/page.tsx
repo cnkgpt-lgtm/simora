@@ -326,8 +326,8 @@ export default function RuanganPage() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="modal-enter max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
             <h2 className="text-lg font-bold text-gray-900">
               {editing ? 'Ubah Ruangan' : 'Tambah Ruangan'}
             </h2>

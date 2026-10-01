@@ -4,13 +4,13 @@ export const inputCls =
   'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100';
 
 export const btnPrimary =
-  'inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200';
 
 export const btnSecondary =
-  'inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200';
 
 export const btnDanger =
-  'inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200';
 
 export function Card({ className = '', children }: { className?: string; children: React.ReactNode }) {
   return <div className={`rounded-xl border border-gray-200 bg-white shadow-sm ${className}`}>{children}</div>;
@@ -72,6 +72,11 @@ export function EmptyState({ title, hint, action }: { title: string; hint?: stri
       {action && <div className="mt-4">{action}</div>}
     </Card>
   );
+}
+
+/** Placeholder berkilau untuk status memuat. */
+export function Skeleton({ className = '' }: { className?: string }) {
+  return <div aria-hidden className={`skeleton rounded-lg ${className}`} />;
 }
 
 /** Label Indonesia untuk status operasional & master. */

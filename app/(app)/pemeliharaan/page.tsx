@@ -265,10 +265,10 @@ export default function PemeliharaanPage() {
 
       {/* Modal tambah */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <form
             onSubmit={submitAdd}
-            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
+            className="modal-enter max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl"
           >
             <h2 className="mb-4 text-base font-bold text-gray-900">Tambah Pemeliharaan</h2>
             {formError && <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{formError}</p>}
@@ -345,8 +345,8 @@ export default function PemeliharaanPage() {
 
       {/* Modal edit status */}
       {editItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <form onSubmit={submitEdit} className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <form onSubmit={submitEdit} className="modal-enter w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
             <h2 className="mb-1 text-base font-bold text-gray-900">Ubah Status</h2>
             <p className="mb-4 text-sm text-gray-500">
               {editItem.room.name} ({editItem.room.code})

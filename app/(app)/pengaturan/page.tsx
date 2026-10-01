@@ -65,6 +65,9 @@ export default function PengaturanPage() {
   const [setLoading, setSetLoading] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
 
+  // --- Status Telegram ---
+  const [tgStatus, setTgStatus] = useState<{ botConfigured: boolean; adminChatConfigured: boolean } | null>(null);
+
   // --- Pengguna ---
   const [users, setUsers] = useState<UserRow[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
@@ -140,6 +143,9 @@ export default function PengaturanPage() {
       loadSettings();
       loadUsers();
       loadAudit();
+      api<{ botConfigured: boolean; adminChatConfigured: boolean }>('/api/settings/telegram')
+        .then(setTgStatus)
+        .catch(() => setTgStatus(null));
     }
   }, [me, loadSettings, loadUsers, loadAudit]);
 
@@ -250,7 +256,25 @@ export default function PengaturanPage() {
       </div>
 
       {tab === 'operasional' && (
-        <Card className="p-6">
+        <div className="space-y-5">
+          <Card className="p-6">
+            <h2 className="mb-4 text-base font-bold text-gray-900">Notifikasi Telegram</h2>
+            <div className="flex flex-wrap gap-2">
+              <Badge tone={tgStatus?.botConfigured ? 'green' : 'red'}>
+                Bot: {tgStatus ? (tgStatus.botConfigured ? 'Terhubung' : 'Belum dikonfigurasi') : '…'}
+              </Badge>
+              <Badge tone={tgStatus?.adminChatConfigured ? 'green' : 'gray'}>
+                Grup admin:{' '}
+                {tgStatus ? (tgStatus.adminChatConfigured ? 'Terisi' : 'Belum diisi') : '…'}
+              </Badge>
+            </div>
+            <p className="mt-3 text-sm text-gray-600">
+              Token bot diatur lewat Environment Variable <b>TELEGRAM_BOT_TOKEN</b> di Vercel
+              (opsional: <b>TELEGRAM_ADMIN_CHAT_ID</b> untuk notifikasi pengajuan baru ke grup
+              admin). Panduan lengkap ada di file <b>TELEGRAM_SETUP.md</b> pada source code.
+            </p>
+          </Card>
+          <Card className="p-6">
           <h2 className="mb-4 text-base font-bold text-gray-900">Pengaturan Operasional</h2>
           <p className="mb-4 rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-800">
             Zona waktu dikunci: Asia/Makassar (WITA)
@@ -314,7 +338,8 @@ export default function PengaturanPage() {
               </button>
             </form>
           )}
-        </Card>
+          </Card>
+        </div>
       )}
 
       {tab === 'pengguna' && (
@@ -413,8 +438,8 @@ export default function PengaturanPage() {
 
       {/* Modal tambah pengguna */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <form onSubmit={submitAdd} className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <form onSubmit={submitAdd} className="modal-enter w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
             <h2 className="mb-4 text-base font-bold text-gray-900">Tambah Pengguna</h2>
             {addError && <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{addError}</p>}
             <div className="space-y-3">
@@ -463,8 +488,8 @@ export default function PengaturanPage() {
 
       {/* Modal edit pengguna */}
       {editUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <form onSubmit={submitEdit} className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <div className="overlay-enter fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <form onSubmit={submitEdit} className="modal-enter w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
             <h2 className="mb-1 text-base font-bold text-gray-900">Edit Pengguna</h2>
             <p className="mb-4 text-sm text-gray-500">{editUser.username}</p>
             {editError && (
